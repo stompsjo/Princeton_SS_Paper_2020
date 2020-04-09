@@ -1,8 +1,8 @@
 PAPER=princeton
 
-all: paper
+all: $(PAPER).pdf
 
-paper:
+$(PAPER).pdf: $(PAPER).tex references.bib 
 	pdflatex $(PAPER).tex
 	bibtex $(PAPER).aux
 	pdflatex $(PAPER).tex
