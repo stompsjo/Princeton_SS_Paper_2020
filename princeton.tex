@@ -2,6 +2,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 \usepackage{graphicx}
+\usepackage{hyperref}
 
 \title{Modeling Gas Centrifuge Uranium Enrichment to Support Nuclear Nonproliferation}
 \author{Jordan Stomps}
@@ -15,13 +16,18 @@
 
 Uranium enrichment is a crucial step in the nuclear fuel cycle that requires careful design and construction to provide the necessary supply chain for downstream facilities. Enrichment is also an integral part of nuclear weapons development and thus presents a security challenge to the global community. Monitoring the flow of nuclear materials through an enrichment facility can be difficult, especially when conducted through a facility that attempts to hide the nature of its operations or breaks out of normal operating procedures. Modeling of enrichment would help this effort and contribute to international nuclear nonproliferation.
 
-Enrichment is traditionally conducted using gas centrifuges chained together in cascades that allows the steady separation of useful nuclear material \cite{avery}. Because of the sensitivity of this work relative to nation states’ nuclear fuel cycle, gas centrifuge characteristics have historical been classified. This further increases the need for and challenge of accurate modeling in this area. Information has generally been provided piecemeal in literature. This can be used to develop a physical model of individual centrifuges and their eventual cascades. This can then be applied to national facilities and fuel cycles to monitor, anticipate, or verify operational history.
+Such a model has particular value in regard to Iran and the Join Comprehensive Plan of Action (JCPOA). With Iran reportedly breaking out of JCPOA, technology is needed that helps anticipate Iran's ability to develop nuclear weapons from its current infrastructure and how quickly that can be accomplished. Since the JCPOA sets limitations on the number of centrifuges and enrichment levels that Iran can produce, this provides specific parameters for Iran’s facilities even when their operational history is unknown or not publicly available. Modeling this facility structure is the first step in an analysis that identifies signatures and behaviors that indicate deviations from the JCPOA. In this way, nations with vested interests towards nuclear nonproliferation can make informed decisions towards nuclear security where direct measurement is not possible due to hostilities or diversion.
 
-Such a model has particular value in regard to Iran and the Join Comprehensive Plan of Action (JCPOA). Since the JCPOA sets limitations on the number of centrifuges and enrichment levels that Iran can produce, this provides specific parameters for Iran’s facilities even when their operational history is unknown or not publicly available. By modeling this facility structure, an informed analysis can be created that would predict signatures and behavior that would indicate deviations from limitations in the JCPOA.
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=\textwidth]{flow.png}
+    \caption{Representation of a gas centrifuge, uranium enrichment facility. Centrifuges, denoted by small red dots, are chained together in stages (one stage is a row of red dots). These rows are collected into a cascade (outlined in boxes), collected together in cascade levels, and then organized together. Cascades and cascade levels are designed to optimize output enrichment, where the product of one level is fed into the next. The tails of a cascade can be recycled by adding it to the feed of the previous level (as denoted by yellow dotted-lines.}
+    \label{fig:cascades}
+\end{figure}
 
 \section{Gas Centrifuge Enrichment Model}
 
-Current work in developing an enrichment model relies on past research that produced an analytical solution \cite{raetz.phd} to describe the work done by a gas centrifuge. Many of the functional characteristics for modeling a gas centrifuge have been detailed by previous work \cite{glaser.2008}. This provides a detailed physical model for a centrifuge that can be used as the basis for designing an enrichment facility.
+Enrichment is traditionally conducted using gas centrifuges chained together in cascades that allows the steady separation of useful nuclear material \cite{avery}. Because of the sensitivity of this work relative to nation states’ nuclear fuel cycle, gas centrifuge characteristics have historical been classified. This further increases the need for and challenge of accurate modeling in this area. Information has generally been provided piecemeal in literature. Current work in developing an enrichment model relies on past research that produced an analytical solution \cite{raetz.phd} to describe the work done by a gas centrifuge. Many of the functional characteristics for modeling a gas centrifuge have been detailed by previous work \cite{glaser.2008}. This provides a detailed physical model for a centrifuge that can be used as the basis for designing an enrichment facility.
 
 The output of a centrifuge generally is described by several enrichment factors: $\alpha$ (feed to product), $\beta$ (feed to tail), and $\gamma$ (tail to product). These are calculated by the ratios of feed, product, and tail abundances, or N, N’, and N’’ respectively:
 
@@ -39,16 +45,9 @@ The output of a centrifuge generally is described by several enrichment factors:
 
 In operating an enrichment facility, centrifuges are chained together in stages where the product of one centrifuge is the feed of the next. These stages can be collected (where the product or tail of one stage will be the feed of another stage) resulting in a cascade of stages. Finally, cascades are combined in cascade levels, as seen in Fig. \ref{fig:cascades}, to complete the enrichment cycle. Cascades are designed to optimize the enrichment of the gas, UF6, being fed into the machines. Optimization occurs by designing ideal cascades, where there is no loss in separative work. A cut, $\theta$, can also be calculated from the above parameters. The cut describes the relative fraction of output material that is separated as product or tail.
 
-\begin{figure}
-    \centering
-    \includegraphics[width=\textwidth]{flow.png}
-    \caption{Representation of a gas centrifuge, uranium enrichment facility. Centrifuges, denoted by small red dots, are chained together in stages (one stage is a row of red dots). These rows are collected into a cascade (outlined in boxes), collected together in cascade levels, and then organized together. Cascades and cascade levels are designed to optimize output enrichment, where the product of one level is fed into the next. The tails of a cascade can be recycled by adding it to the feed of the previous level (as denoted by yellow dotted-lines.}
-    \label{fig:cascades}
-\end{figure}
+This model is developed using the fuel cycle simulator, Cyclus \cite{cyclus}. The benefit of this software is its modularity: physical models and structures can be used as plugins for different work depending on the purpose. To demonstrate the operability of the model, a non-ideal, symmetric cascade was designed that optimized the feed assay and consequently $\beta$, holding all other parameters constant, to achieve the highest enrichment above 90\% highly-enriched uranium (HEU) with the least amount of machines. Iterating this simulation over arbitrary timesteps until an equilibrium was reached resulted in Fig. \ref{fig:enrichment}. Note that four cascade levels were required to reach the significant quantity of HEU with no tails recycling. This algorithm demonstrates that the software package can design and simulate uranium enrichment with sufficient detail to be of interest to inform policy questions and decisions.
 
-This model is developed using the fuel cycle simulator, Cyclus \cite{cyclus}. The benefit of this software is its modularity: physical models and structures can be used as plugins for different work depending on the purpose. To demonstrate the operability of the model, a non-ideal cascade was designed that optimized the feed assay and consequently $\beta$, holding all other parameters constant, to achieve the highest enrichment above 90\% highly-enriched uranium (HEU) with the least amount of machines. Iterating this simulation over arbitrary timesteps until an equilibrium was reached resulted in Fig. \ref{fig:enrichment}. Note that four cascade levels were required to reach the significant quantity of HEU with no tails recycling. This algorithm demonstrates that the software package can design and simulate uranium enrichment with sufficient detail to be of interest to inform policy questions and decisions. 
-
-\begin{figure}
+\begin{figure}[t!]
     \centering
     \includegraphics[width=\textwidth]{NR_case1.png}
     \caption{The enrichment facility was designed to enrich uranium to a weapons grade level ($>$ 90\%) and was achieved in with four cascade levels. Several timesteps were required to reach equilibrium, as earlier cascades need to work towards enrichment before feeding downstream levels. No recycling of tails occurs in this facility.}
@@ -57,14 +56,17 @@ This model is developed using the fuel cycle simulator, Cyclus \cite{cyclus}. Th
 
 \section{Policy Outlook}
 
-The JCPOA limits, for a ten-year period, limits Iran to a uranium enrichment cap of 3.67\%, an appropriate level for commercial nuclear power generation. The agreement also places a maximum cap on the number of centrifuges allowed to be installed and allowed to be used towards enriching uranium \cite{jcpoa}. Recent events have left the future of JCPOA in jeopardy. Tensions between Iran and the United States led Iran announcing it had breached the terms if the agreement, beginning the process of stockpiling low-enriched uranium (LEU) past the JCPOA maximum cap \cite{ap_news}.
+The JCPOA, for a ten-year period, limits Iran to a uranium enrichment cap of 3.67\%, an appropriate level for commercial nuclear power generation. The agreement also places a maximum cap on the number of centrifuges allowed to be installed and allowed to be used towards enriching uranium \cite{jcpoa}. Recent events have left the future of JCPOA in jeopardy. Tensions between Iran and the United States led Iran announcing it had breached the terms if the agreement, beginning the process of stockpiling low-enriched uranium (LEU) past the JCPOA maximum cap \cite{ap_news}.
 
-Gas centrifuge uranium enrichment models like the one described in this work are needed to support monitoring and verification of Iran’s nuclear program, especially with the decay of JCPOA. Despite the efforts of developing this model, it cannot perfectly predict the behavior or performance of a nation-state, especially when so much information is classified. The advantage to having this model is that it can inform policymakers and nuclear security specialists in international negotiations. The model is general enough that it can be reconfigured and redesigned to fit the situational parameters of individual countries and scenarios. That means that for Iran, or any other country, their enrichment infrastructure can be simulated to anticipate, or at least inform, the speed and magnitude of nuclear proliferation.
+Gas centrifuge uranium enrichment models like the one described in this work are needed to support monitoring and verification of Iran’s nuclear program, especially with the decay of JCPOA. Despite the efforts of developing this model, it cannot perfectly predict the behavior or performance of a nation-state, especially when so much information is classified. However, even if it cannot simulate with deep enough fidelity to predict behavior, it still serves a purpose of studying possible scenarios that the international community might experience.
+
+When data is not available, modeling can be used to probe the effectiveness of policy initiatives. The advantage to having this model is that it can inform policymakers and nuclear security specialists in international negotiations. The model is general enough that it can be reconfigured and redesigned to fit the situational parameters of individual countries and scenarios. That means that for Iran, or any other country, their enrichment infrastructure can be simulated to anticipate, or at least inform, the speed and magnitude of nuclear proliferation.
 
 \section{Conclusion}
 
 Of course, modeling and simulation is only one part of the tools needed to support international policymakers in moving towards a more peaceful nuclear fuel cycle. Computational modeling can be coupled with physical tools for verification of compliance with nuclear agreements. Significant advancements have also been made in developing non-invasive detection devices that can be used by watchdogs like the IAEA \cite{origin}. It should be a priority of international leaders to promote the safe and lawful use of nuclear power while limiting the proliferation of nuclear weapons. This requires efforts amongst all countries involved to be open to monitoring and verification. While current events have focused on nuclear programs like Iran’s, this research and development is vital to the entire international community.  Ultimately, computational models and detection devices are an integral part of nuclear nonproliferation.
 
+\pagebreak
 \bibliographystyle{unsrt}
 \bibliography{references.bib}
 
